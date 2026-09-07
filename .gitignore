@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# Simulation output: kept out of version control on purpose.
+# Trajectory ensembles reach several GB and must not enter the repository.
+results/*
+!results/.gitkeep
+*.csv
+*.npy
+*.npz
+*.h5
+*.pkl
+
+# Cluster and run logs
+*.log
+slurm-*.out
+ausgabe_*.log
+
+# OS / editor
+.DS_Store
+*~
+.idea/
+.vscode/

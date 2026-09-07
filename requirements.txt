@@ -1,0 +1,9 @@
+# Versions are left open for now; pin them once the code is in place
+# (pip freeze | grep -iE "numpy|scipy|matplotlib|seaborn|statsmodels|pandas").
+numpy
+scipy
+matplotlib
+seaborn
+statsmodels
+pandas
+jupyter
