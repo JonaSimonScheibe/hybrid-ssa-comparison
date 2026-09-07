@@ -224,9 +224,7 @@ def expectation2(path, n_lines_per_run, t_range):
                 num_successful_runs += 1
                 if num_successful_runs % 10 == 0:
                     print(f"\rVerarbeitete Runs: {num_successful_runs}", end="", flush=True)
-                current_run_lines = []
-
-                
+                current_run_lines = []         
     if num_successful_runs == 0:
         raise ValueError("Es wurden keine gültigen Simulationsruns in der Datei gefunden.")
         
@@ -429,7 +427,6 @@ def hybrid(S,S_ed,c,t0,x0,tf,part):
     g.direction = 1
     ts = [t0]
     xs = [x0]
-    n0 = 0
     while ts[-1] < tf:
         xi = np.random.exponential(1)
         if np.ndim(part) >= 1:
@@ -458,12 +455,11 @@ def hybrid(S,S_ed,c,t0,x0,tf,part):
             next_reaction = np.random.choice(list(np.where(partition)[0]), p=probs)
             ts.append(ts[-1])
             xs.append(x_new + S[:,next_reaction])
-            n0 +=1
         else:
             ts.append(tf)
             xs.append(xs[-1])
             break
-    return [np.array(ts),np.array(xs),n0]
+    return [np.array(ts),np.array(xs)]
     
 
 def hybrid_duncan_ssa(S,S_ed,c,t0,x0,tf,delta_t,Delta_t,boundaries):
@@ -487,7 +483,6 @@ def hybrid_duncan_ssa(S,S_ed,c,t0,x0,tf,delta_t,Delta_t,boundaries):
    """    
     x = [x0]
     t = [t0]
-    n0= 0
     while t[-1] < tf:
         betas = blendings(x[-1],S,boundaries)
         if max(betas) == 0:
@@ -510,7 +505,6 @@ def hybrid_duncan_ssa(S,S_ed,c,t0,x0,tf,delta_t,Delta_t,boundaries):
             x_new[x_new < 0.5] = 0.0
             x.append(x_new)
             t.append(t[-1] + tau)
-            n0 +=1
         else:
             lambda_prime = generalised_blendings(x[-1],c,S,S_ed,boundaries,False)
             lambda_0 = np.sum(lambda_prime)
@@ -529,13 +523,12 @@ def hybrid_duncan_ssa(S,S_ed,c,t0,x0,tf,delta_t,Delta_t,boundaries):
                 x_new[x_new < 0.5] = 0.0
                 x.append(x_new)
                 t.append(t[-1] + tau)
-                n0 +=1
             else:
                 x_new = np.maximum(0.0, cle(x[-1],c,Delta_t,S,S_ed,boundaries))
                 x_new[x_new < 0.5] = 0.0
                 x.append(x_new)
                 t.append(t[-1] + Delta_t)
-    return [np.array(t),np.array(x),n0]
+    return [np.array(t),np.array(x)]
 
 
 def hybrid_duncan_next_reaction(S,S_ed,c,t0,x0,tf,delta_t,Delta_t,boundaries):
