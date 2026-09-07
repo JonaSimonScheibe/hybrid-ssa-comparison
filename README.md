@@ -9,8 +9,6 @@ and the blending framework of Duncan et al., in its Duncan-SSA and Duncan-Thinni
 against the exact stochastic simulation algorithm (SSA) and the chemical Langevin equation
 (CLE), on a biochemical Lotka–Volterra model and the bacteriophage T7 replication model.
 
-> **Status: the repository structure is in place, the code is not uploaded yet.**
-
 ## Structure
 
 | Folder | Contents |
@@ -24,6 +22,14 @@ against the exact stochastic simulation algorithm (SSA) and the chemical Langevi
 
 Trajectory ensembles reach several gigabytes and are therefore excluded from the repository;
 `results/` stays empty here and is filled by running the code.
+
+## Documentation
+
+- [`docs/library.md`](docs/library.md) — reference for `src/stochastinetics.py`: model
+  conventions, the algorithms, and the evaluation helpers
+- [`docs/scripts.md`](docs/scripts.md) — what each batch script computes, and what has to be
+  adjusted before running it
+- [`docs/notebooks.md`](docs/notebooks.md) — which notebook covers which part of the report
 
 ## Usage
 

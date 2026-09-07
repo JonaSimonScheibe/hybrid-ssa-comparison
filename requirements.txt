@@ -1,9 +1,22 @@
-# Versions are left open for now; pin them once the code is in place
-# (pip freeze | grep -iE "numpy|scipy|matplotlib|seaborn|statsmodels|pandas").
+# Runtime dependencies, as actually imported by src/, scripts/ and notebooks/.
+#
+# No versions are pinned: the results were produced over a longer period and partly on the
+# HPC cluster, so a single exact environment cannot be reconstructed honestly. The following
+# combination is known to work and is the one available locally:
+#
+#   numpy 2.4.3, scipy 1.17.1, matplotlib 3.10.8, seaborn 0.13.2, pandas 3.0.2, tqdm 4.67.3
+#
+# Note on multiprocess: this is the dill-based package from PyPI, NOT the standard library's
+# multiprocessing. Every script in scripts/ needs it, and it is not part of a default
+# scientific Python installation.
+
 numpy
 scipy
 matplotlib
 seaborn
-statsmodels
 pandas
+tqdm
+multiprocess
+
+# For the notebooks
 jupyter
