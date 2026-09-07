@@ -4,11 +4,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib
 matplotlib.use('Agg')
-from scipy.integrate import solve_ivp
-modul_path = "/home/scheibe5"
+modul_path = "/work/scheibe5/bacteriophage_t7/"
 if modul_path not in sys.path:
     sys.path.append(modul_path)
 import stochastinetics
+from scipy.integrate import solve_ivp
 from tqdm import tqdm
 import time
 import multiprocess
@@ -27,6 +27,7 @@ delta_t = 10**(-2)
 I1 = 25.0
 I2 = 35.0
 boundaries = np.array([I1,I2,I1,I2,I1,I2])
+lambda_bounds = np.array([7.5, 5.0, 7.5, 0.35, 1200, 35])
 
 S = np.array([[-1,0,1,-1,0,0],[1,-1,0,0,0,0],[0,0,0,-1,1,-1]]) # order [gen,tem,struc]
 S_ed = np.array([[1,0,0,1,0,0],[0,1,1,0,1,0],[0,0,0,1,0,1]],dtype=int)
@@ -52,6 +53,22 @@ def run_single_alfonsi(i, S=S, S_ed=S_ed, c=c, t0=t0, x0=x0, tf=tf):
     t, z = stochastinetics.hybrid(S, S_ed, c, t0, x0, tf,threshold)
     return t, z
 
+def run_single_cle(i, S=S, S_ed=S_ed, c=c, t0=t0, x0=x0, tf=tf):
+    t, z = stochastinetics.cle_trajectory(S, S_ed, c, t0, x0, tf,Delta_t)
+    return t, z
+
+def run_single_duncan_ssa(i, S=S, S_ed=S_ed, c=c, t0=t0, x0=x0, tf=tf):
+    t, z = stochastinetics.hybrid_duncan_ssa(S, S_ed, c, t0, x0, tf,delta_t,Delta_t,boundaries)
+    return t, z
+
+def run_single_duncan_thinning(i, S=S, S_ed=S_ed, c=c, t0=t0, x0=x0, tf=tf):
+    t, z = stochastinetics.hybrid_duncan_thinning(S,S_ed,c,t0,x0,tf,delta_t,Delta_t,boundaries,lambda_bounds)
+    return t, z
+
+def run_single_ssa(i, S=S, S_ed=S_ed, c=c, t0=t0, x0=x0, tf=tf):
+    t, z = stochastinetics.SSA(S, S_ed, c, t0, x0, tf)
+    return t, z
+
 
 if __name__ == "__main__":
     t_eval = np.linspace(t0, tf, n1)
@@ -73,16 +90,3 @@ if __name__ == "__main__":
 
     path = os.path.join("/work/scheibe5/bacteriophage_t7/alfonsi_adaptive",f"result_alfonsi_adaptive_10_bacteriophage.csv")
     stochastinetics.save_sim_results(result_alfonsi,path)
-    t_range = np.arange(0, 200, 2)
-    exp_alfonsi = stochastinetics.expectation(result_alfonsi, n, t_range)[:,1]
-
-    fig, ax = plt.subplots(figsize=(10, 4))
-    ax.plot(bacteriophage.t, tem, label="deterministic")
-    ax.plot(t_range,exp_alfonsi,label="alfonsi adaptive partitioning")
-    ax.legend()
-    ax.set_xlabel("Time [days]")
-    ax.set_ylabel("Number of tem molecules")
-    ax.grid(True, linestyle=':', color='gray', alpha=0.6)
-    path2 = os.path.join("/work/scheibe5/bacteriophage_t7/alfonsi_adaptive","bacteriophage_model_alfonsi_adaptive_10_and_deterministic.png")
-    plt.savefig(path2)
-    plt.close(fig)
