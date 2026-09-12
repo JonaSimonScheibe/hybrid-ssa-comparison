@@ -33,9 +33,7 @@ Trajectory ensembles reach several gigabytes and are therefore excluded from the
 
 ## Usage
 
-```bash
-pip install -r requirements.txt
-```
+pip install the packages of requirements.txt
 
 Then run the notebooks in `notebooks/`.
 
